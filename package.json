@@ -20,6 +20,11 @@
 	},
 	"homepage": "https://github.com/shanidh-khan/NodeTraining#readme",
 	"dependencies": {
-		"express": "^4.19.2"
+		"express": "^4.19.2",
+		"typescript": "^5.5.3"
+	},
+	"devDependencies": {
+		"@types/node": "20.14.9",
+		"@types/express": "4.17.21"
 	}
 }
