@@ -1,0 +1,25 @@
+{
+	"name": "nodetraining",
+	"version": "1.0.0",
+	"description": "",
+	"main": "app.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"start-server": "node app.js",
+		"introduction": "echo 'My name is Shanidh Khan'"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/shanidh-khan/NodeTraining.git"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/shanidh-khan/NodeTraining/issues"
+	},
+	"homepage": "https://github.com/shanidh-khan/NodeTraining#readme",
+	"dependencies": {
+		"express": "^4.19.2"
+	}
+}
