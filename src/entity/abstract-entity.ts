@@ -1,5 +1,4 @@
 import {
-	Column,
 	CreateDateColumn,
 	DeleteDateColumn,
 	Entity,
@@ -7,16 +6,9 @@ import {
 	UpdateDateColumn,
 } from "typeorm";
 
-@Entity()
-class Employee {
+class AbstractEntity {
 	@PrimaryGeneratedColumn()
-	id: Number;
-
-	@Column()
-	email: String;
-
-	@Column()
-	name: String;
+	id: number;
 
 	@CreateDateColumn()
 	createdAt: Date;
@@ -28,4 +20,4 @@ class Employee {
 	deletedAt: Date;
 }
 
-export default Employee;
+export default AbstractEntity;

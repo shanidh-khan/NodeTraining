@@ -10,34 +10,23 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const typeorm_1 = require("typeorm");
-let Employee = class Employee {
-};
+class AbstractEntity {
+}
 __decorate([
     (0, typeorm_1.PrimaryGeneratedColumn)(),
     __metadata("design:type", Number)
-], Employee.prototype, "id", void 0);
-__decorate([
-    (0, typeorm_1.Column)(),
-    __metadata("design:type", String)
-], Employee.prototype, "email", void 0);
-__decorate([
-    (0, typeorm_1.Column)(),
-    __metadata("design:type", String)
-], Employee.prototype, "name", void 0);
+], AbstractEntity.prototype, "id", void 0);
 __decorate([
     (0, typeorm_1.CreateDateColumn)(),
     __metadata("design:type", Date)
-], Employee.prototype, "createdAt", void 0);
+], AbstractEntity.prototype, "createdAt", void 0);
 __decorate([
     (0, typeorm_1.UpdateDateColumn)(),
     __metadata("design:type", Date)
-], Employee.prototype, "updatedAt", void 0);
+], AbstractEntity.prototype, "updatedAt", void 0);
 __decorate([
     (0, typeorm_1.DeleteDateColumn)(),
     __metadata("design:type", Date)
-], Employee.prototype, "deletedAt", void 0);
-Employee = __decorate([
-    (0, typeorm_1.Entity)()
-], Employee);
-exports.default = Employee;
-//# sourceMappingURL=employees.js.map
+], AbstractEntity.prototype, "deletedAt", void 0);
+exports.default = AbstractEntity;
+//# sourceMappingURL=abstract-entity.js.map

@@ -5,4 +5,4 @@ const loggerMiddleware = (req, res, next) => {
     next();
 };
 exports.default = loggerMiddleware;
-//# sourceMappingURL=loggerMiddleware.js.map
+//# sourceMappingURL=logger.middleware.js.map
