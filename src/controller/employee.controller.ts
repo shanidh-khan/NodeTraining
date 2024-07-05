@@ -18,10 +18,19 @@ class EmployeeController {
 	}
 	public getAllEmployees = async (
 		req: express.Request,
-		res: express.Response
+		res: express.Response,
+		next: express.NextFunction
 	) => {
-		const employees = await this.employeeService.getAllEmployees();
-		res.status(200).send(employees);
+		try {
+			const employees = await this.employeeService.getAllEmployees();
+			if (!employees) {
+				const error = new HttpException(404, `No Employees found`);
+				throw error;
+			}
+			res.status(200).send(employees);
+		} catch (err) {
+			next(err);
+		}
 	};
 
 	public getEmployeeById = async (
@@ -72,18 +81,25 @@ class EmployeeController {
 
 	public deleteEmployee = async (
 		req: express.Request,
-		res: express.Response
+		res: express.Response,
+		next: express.NextFunction
 	) => {
-		const result = await this.employeeService.deleteEmployee(
-			Number(req.params.id)
-		);
-		console.log(result);
-		res.status(204).send();
+		try {
+			const result = await this.employeeService.deleteEmployee(
+				Number(req.params.id)
+			);
+
+			console.log(result);
+			res.status(204).send();
+		} catch (err) {
+			next(err);
+		}
 	};
 
 	public updateEmployee = async (
 		req: express.Request,
-		res: express.Response
+		res: express.Response,
+		next: express.NextFunction
 	) => {
 		const employee = await this.employeeService.updateEmployee(
 			Number(req.params.id),

@@ -56,7 +56,7 @@ class EmployeeService {
     deleteEmployee(id) {
         return __awaiter(this, void 0, void 0, function* () {
             const employee = yield this.employeeRepository.findOneBy({ id });
-            return yield this.employeeRepository.delete(employee);
+            return yield this.employeeRepository.remove(employee);
         });
     }
 }

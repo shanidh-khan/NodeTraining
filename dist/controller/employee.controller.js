@@ -20,9 +20,18 @@ const class_validator_1 = require("class-validator");
 class EmployeeController {
     constructor(employeeService) {
         this.employeeService = employeeService;
-        this.getAllEmployees = (req, res) => __awaiter(this, void 0, void 0, function* () {
-            const employees = yield this.employeeService.getAllEmployees();
-            res.status(200).send(employees);
+        this.getAllEmployees = (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+            try {
+                const employees = yield this.employeeService.getAllEmployees();
+                if (!employees) {
+                    const error = new http_exceptions_1.default(404, `No Employees found`);
+                    throw error;
+                }
+                res.status(200).send(employees);
+            }
+            catch (err) {
+                next(err);
+            }
         });
         this.getEmployeeById = (req, res, next) => __awaiter(this, void 0, void 0, function* () {
             try {
@@ -52,12 +61,21 @@ class EmployeeController {
                 next(error);
             }
         });
-        this.deleteEmployee = (req, res) => __awaiter(this, void 0, void 0, function* () {
-            const result = yield this.employeeService.deleteEmployee(Number(req.params.id));
-            console.log(result);
-            res.status(204).send();
+        this.deleteEmployee = (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+            try {
+                const result = yield this.employeeService.deleteEmployee(Number(req.params.id));
+                if (!result) {
+                    const error = new http_exceptions_1.default(404, `No Employee found with id: ${req.params.id}`);
+                    throw error;
+                }
+                console.log(result);
+                res.status(204).send();
+            }
+            catch (err) {
+                next(err);
+            }
         });
-        this.updateEmployee = (req, res) => __awaiter(this, void 0, void 0, function* () {
+        this.updateEmployee = (req, res, next) => __awaiter(this, void 0, void 0, function* () {
             const employee = yield this.employeeService.updateEmployee(Number(req.params.id), req.body);
             res.status(200).send(employee);
         });

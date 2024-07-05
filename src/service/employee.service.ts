@@ -43,7 +43,7 @@ class EmployeeService {
 
 	async deleteEmployee(id: number) {
 		const employee = await this.employeeRepository.findOneBy({ id });
-		return await this.employeeRepository.delete(employee);
+		return await this.employeeRepository.remove(employee);
 	}
 }
 

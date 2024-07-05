@@ -6,7 +6,7 @@ class EmployeeRepository {
 
 	async find() {
 		const employeeRepository = this.repository;
-		return employeeRepository.find();
+		return employeeRepository.find({ relations: ["address"] });
 	}
 
 	async findOneBy(filter: Partial<Employee>): Promise<Employee> {
@@ -23,6 +23,12 @@ class EmployeeRepository {
 	}
 
 	async delete(employee: Employee) {
+		const employeeRepository = this.repository;
+
+		return await employeeRepository.softDelete(employee);
+	}
+
+	async remove(employee: Employee) {
 		const employeeRepository = this.repository;
 
 		return await employeeRepository.softRemove(employee);

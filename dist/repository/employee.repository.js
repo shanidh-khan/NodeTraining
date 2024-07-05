@@ -16,7 +16,7 @@ class EmployeeRepository {
     find() {
         return __awaiter(this, void 0, void 0, function* () {
             const employeeRepository = this.repository;
-            return employeeRepository.find();
+            return employeeRepository.find({ relations: ["address"] });
         });
     }
     findOneBy(filter) {
@@ -35,6 +35,12 @@ class EmployeeRepository {
         });
     }
     delete(employee) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const employeeRepository = this.repository;
+            return yield employeeRepository.softDelete(employee);
+        });
+    }
+    remove(employee) {
         return __awaiter(this, void 0, void 0, function* () {
             const employeeRepository = this.repository;
             return yield employeeRepository.softRemove(employee);
