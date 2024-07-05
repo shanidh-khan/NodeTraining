@@ -4,6 +4,8 @@ import HttpException from "../exceptions/http.exceptions";
 import { plainToInstance } from "class-transformer";
 import { CreateEmployeeDto } from "../dto/employee.dto";
 import { validate } from "class-validator";
+import authorize from "../middleware/authorization.middleware";
+import Role from "../utils/role.enum";
 
 class EmployeeController {
 	public router: express.Router;
@@ -12,9 +14,10 @@ class EmployeeController {
 		this.router = express.Router();
 		this.router.get("/", this.getAllEmployees);
 		this.router.get("/:id", this.getEmployeeById);
-		this.router.post("/", this.createEmployee);
+		this.router.post("/", authorize, this.createEmployee);
 		this.router.delete("/:id", this.deleteEmployee);
 		this.router.put("/:id", this.updateEmployee);
+		this.router.post("/login", this.loginEmployee);
 	}
 	public getAllEmployees = async (
 		req: express.Request,
@@ -61,6 +64,14 @@ class EmployeeController {
 		next: express.NextFunction
 	) => {
 		try {
+			const role = req.body.role;
+			if (role != Role.HR) {
+				throw new HttpException(
+					403,
+					"You are not authorized to create employee"
+				);
+			}
+
 			const employeeDto = plainToInstance(CreateEmployeeDto, req.body);
 			const errors = await validate(employeeDto);
 			if (errors.length) {
@@ -71,7 +82,9 @@ class EmployeeController {
 				employeeDto.name,
 				employeeDto.email,
 				employeeDto.age,
-				employeeDto.address
+				employeeDto.address,
+				employeeDto.password,
+				employeeDto.role
 			);
 			res.status(201).send(employee);
 		} catch (error) {
@@ -106,6 +119,23 @@ class EmployeeController {
 			req.body
 		);
 		res.status(200).send(employee);
+	};
+
+	public loginEmployee = async (
+		req: express.Request,
+		res: express.Response,
+		next: express.NextFunction
+	) => {
+		const { email, password } = req.body;
+		try {
+			const token = await this.employeeService.loginEmployee(
+				email,
+				password
+			);
+			res.status(200).send(token);
+		} catch (error) {
+			next(error);
+		}
 	};
 }
 

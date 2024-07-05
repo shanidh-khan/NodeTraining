@@ -1,5 +1,6 @@
 import {
 	IsEmail,
+	IsEnum,
 	IsNotEmpty,
 	IsNumber,
 	IsString,
@@ -7,6 +8,7 @@ import {
 } from "class-validator";
 import Address from "../entity/address.entity";
 import "reflect-metadata";
+import Role from "../utils/role.enum";
 
 export class CreateEmployeeDto {
 	@IsNotEmpty()
@@ -25,4 +27,12 @@ export class CreateEmployeeDto {
 	@IsNotEmpty()
 	@ValidateNested({ each: true })
 	address: Address;
+
+	@IsNotEmpty()
+	@IsString()
+	password: string;
+
+	@IsNotEmpty()
+	@IsEnum(Role)
+	role: Role;
 }

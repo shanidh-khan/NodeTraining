@@ -1,14 +1,15 @@
 import { Column, Entity, JoinColumn, OneToOne } from "typeorm";
 import AbstractEntity from "./abstract-entity";
 import Address from "./address.entity";
+import Role from "../utils/role.enum";
 
 @Entity()
 class Employee extends AbstractEntity {
 	@Column()
-	email: String;
+	email: string;
 
 	@Column()
-	name: String;
+	name: string;
 
 	@Column()
 	age: Number;
@@ -18,6 +19,12 @@ class Employee extends AbstractEntity {
 		onDelete: "CASCADE",
 	})
 	address: Address;
+
+	@Column({ nullable: true })
+	password: string;
+
+	@Column({ nullable: true })
+	role: Role;
 }
 
 export default Employee;
