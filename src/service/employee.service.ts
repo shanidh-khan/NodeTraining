@@ -1,4 +1,3 @@
-import { EntityNotFoundError } from "typeorm";
 import Address from "../entity/address.entity";
 import Employee from "../entity/employee.entity";
 import EmployeeRepository from "../repository/employee.repository";
@@ -7,9 +6,15 @@ import bcrypt from "bcrypt";
 import jsonwebtoken from "jsonwebtoken";
 import { jwtPayLoad } from "../utils/jwtPayload";
 import { JWT_TOKEN, JWT_VALIDITY } from "../utils/constants";
+import Department from "../entity/department.entity";
+import DepartmentRepository from "../repository/department.repository";
+import HttpException from "../exceptions/http.exceptions";
 
 class EmployeeService {
-	constructor(private employeeRepository: EmployeeRepository) {}
+	constructor(
+		private employeeRepository: EmployeeRepository,
+		private departmentRepository: DepartmentRepository
+	) {}
 
 	async getAllEmployees() {
 		return this.employeeRepository.find();
@@ -25,7 +30,8 @@ class EmployeeService {
 		age: number,
 		address: Address,
 		password: string,
-		role: Role
+		role: Role,
+		department: Department
 	) {
 		const newEmployee = new Employee();
 		newEmployee.email = email;
@@ -36,18 +42,39 @@ class EmployeeService {
 		const newAddress = new Address();
 		newAddress.line1 = address.line1;
 		newAddress.pincode = address.pincode;
-
 		newEmployee.address = newAddress;
-		return this.employeeRepository.save(newEmployee);
+
+		const newDepartment = await this.departmentRepository.findOne(
+			department
+		);
+		if (newDepartment) {
+			newEmployee.department = newDepartment;
+			return this.employeeRepository.save(newEmployee);
+		} else {
+			throw new HttpException(404, "Department Not Found");
+		}
 	}
 
 	async updateEmployee(id: number, detailsToUpdate: Partial<Employee>) {
 		const employee = await this.employeeRepository.findOneBy({ id });
-		employee.name = detailsToUpdate.name;
-		employee.email = detailsToUpdate.email;
-		employee.age = detailsToUpdate.age;
+		employee.name = detailsToUpdate?.name;
+		employee.email = detailsToUpdate?.email;
+		employee.age = detailsToUpdate?.age;
 		employee.address.line1 = detailsToUpdate.address?.line1;
 		employee.address.pincode = detailsToUpdate.address?.pincode;
+		employee.role = detailsToUpdate?.role;
+		const newDepartment = await this.departmentRepository.findOne(
+			detailsToUpdate.department
+		);
+		if (detailsToUpdate.department) {
+			if (newDepartment) {
+				employee.department = newDepartment;
+				return this.employeeRepository.save(employee);
+			} else {
+				throw new HttpException(404, "Department Not Found");
+			}
+		}
+
 		return this.employeeRepository.save(employee);
 	}
 

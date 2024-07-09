@@ -12,11 +12,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CreateEmployeeDto = void 0;
+exports.CreateEmployeeDto = exports.UpdateEmployeeDto = void 0;
 const class_validator_1 = require("class-validator");
 const address_entity_1 = __importDefault(require("../entity/address.entity"));
 require("reflect-metadata");
 const role_enum_1 = __importDefault(require("../utils/role.enum"));
+const department_entity_1 = __importDefault(require("../entity/department.entity"));
 class CreateEmployeeDto {
 }
 exports.CreateEmployeeDto = CreateEmployeeDto;
@@ -51,4 +52,48 @@ __decorate([
     (0, class_validator_1.IsEnum)(role_enum_1.default),
     __metadata("design:type", String)
 ], CreateEmployeeDto.prototype, "role", void 0);
+__decorate([
+    (0, class_validator_1.IsNotEmpty)(),
+    (0, class_validator_1.ValidateNested)({ each: true }),
+    __metadata("design:type", department_entity_1.default)
+], CreateEmployeeDto.prototype, "department", void 0);
+class UpdateEmployeeDto {
+}
+exports.UpdateEmployeeDto = UpdateEmployeeDto;
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], UpdateEmployeeDto.prototype, "name", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsEmail)(),
+    __metadata("design:type", String)
+], UpdateEmployeeDto.prototype, "email", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsNumber)(),
+    __metadata("design:type", Number)
+], UpdateEmployeeDto.prototype, "age", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.ValidateNested)({ each: true }),
+    __metadata("design:type", address_entity_1.default)
+], UpdateEmployeeDto.prototype, "address", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], UpdateEmployeeDto.prototype, "password", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsEnum)(role_enum_1.default),
+    __metadata("design:type", String)
+], UpdateEmployeeDto.prototype, "role", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.ValidateNested)({ each: true }),
+    __metadata("design:type", department_entity_1.default)
+], UpdateEmployeeDto.prototype, "department", void 0);
 //# sourceMappingURL=employee.dto.js.map

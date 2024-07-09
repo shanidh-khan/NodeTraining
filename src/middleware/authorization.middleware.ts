@@ -3,6 +3,7 @@ import jsonwebtoken from "jsonwebtoken";
 import { JWT_TOKEN } from "../utils/constants";
 import { RequestWithUser } from "../utils/requestWithUser";
 import { jwtPayLoad } from "../utils/jwtPayload";
+import HttpException from "../exceptions/http.exceptions";
 
 const authorize = async (
 	req: RequestWithUser,
@@ -11,6 +12,12 @@ const authorize = async (
 ) => {
 	try {
 		const token = getTokenFromRequestHeader(req);
+		if (!token) {
+			throw new HttpException(
+				403,
+				"You are not authorized. Please login to continue"
+			);
+		}
 		console.log("token: ", token);
 		const payload = jsonwebtoken.verify(token, JWT_TOKEN);
 

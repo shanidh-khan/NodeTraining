@@ -17,9 +17,11 @@ const employee_entity_1 = __importDefault(require("../entity/employee.entity"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const constants_1 = require("../utils/constants");
+const http_exceptions_1 = __importDefault(require("../exceptions/http.exceptions"));
 class EmployeeService {
-    constructor(employeeRepository) {
+    constructor(employeeRepository, departmentRepository) {
         this.employeeRepository = employeeRepository;
+        this.departmentRepository = departmentRepository;
     }
     getAllEmployees() {
         return __awaiter(this, void 0, void 0, function* () {
@@ -31,7 +33,7 @@ class EmployeeService {
             return this.employeeRepository.findOneBy({ id });
         });
     }
-    createEmployee(name, email, age, address, password, role) {
+    createEmployee(name, email, age, address, password, role, department) {
         return __awaiter(this, void 0, void 0, function* () {
             const newEmployee = new employee_entity_1.default();
             newEmployee.email = email;
@@ -43,18 +45,36 @@ class EmployeeService {
             newAddress.line1 = address.line1;
             newAddress.pincode = address.pincode;
             newEmployee.address = newAddress;
-            return this.employeeRepository.save(newEmployee);
+            const newDepartment = yield this.departmentRepository.findOne(department);
+            if (newDepartment) {
+                newEmployee.department = newDepartment;
+                return this.employeeRepository.save(newEmployee);
+            }
+            else {
+                throw new http_exceptions_1.default(404, "Department Not Found");
+            }
         });
     }
     updateEmployee(id, detailsToUpdate) {
         return __awaiter(this, void 0, void 0, function* () {
             var _a, _b;
             const employee = yield this.employeeRepository.findOneBy({ id });
-            employee.name = detailsToUpdate.name;
-            employee.email = detailsToUpdate.email;
-            employee.age = detailsToUpdate.age;
+            employee.name = detailsToUpdate === null || detailsToUpdate === void 0 ? void 0 : detailsToUpdate.name;
+            employee.email = detailsToUpdate === null || detailsToUpdate === void 0 ? void 0 : detailsToUpdate.email;
+            employee.age = detailsToUpdate === null || detailsToUpdate === void 0 ? void 0 : detailsToUpdate.age;
             employee.address.line1 = (_a = detailsToUpdate.address) === null || _a === void 0 ? void 0 : _a.line1;
             employee.address.pincode = (_b = detailsToUpdate.address) === null || _b === void 0 ? void 0 : _b.pincode;
+            employee.role = detailsToUpdate === null || detailsToUpdate === void 0 ? void 0 : detailsToUpdate.role;
+            const newDepartment = yield this.departmentRepository.findOne(detailsToUpdate.department);
+            if (detailsToUpdate.department) {
+                if (newDepartment) {
+                    employee.department = newDepartment;
+                    return this.employeeRepository.save(employee);
+                }
+                else {
+                    throw new http_exceptions_1.default(403, "You are not authorized to create employee");
+                }
+            }
             return this.employeeRepository.save(employee);
         });
     }

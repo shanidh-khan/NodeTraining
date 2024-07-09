@@ -5,6 +5,10 @@ import dataSource from "./db/data-source.db";
 import employeeRouter from "./routes/employee.routes";
 import { error } from "console";
 import HttpException from "./exceptions/http.exceptions";
+import dotenv from "dotenv";
+import departmentRouter from "./routes/department.routes";
+import errorMiddleware from "./middleware/error.middleware";
+dotenv.config();
 
 const express = require("express");
 const server = new express();
@@ -12,19 +16,9 @@ const server = new express();
 server.use(bodyParser.json());
 server.use(loggerMiddleware);
 server.use("/employees", employeeRouter);
+server.use("/department", departmentRouter);
 
-server.use((err: Error, req, res, next) => {
-	console.error(err.stack);
-	if (err instanceof HttpException) {
-		res.status(err.status).send({ error: err.message });
-	}
-	res.status(500).send({ error: err.message });
-});
-server.get("/", (req: Request, res: Response) => {
-	console.log(req.url);
-	res.status(200).send("Hello World");
-});
-
+server.use(errorMiddleware);
 (async () => {
 	try {
 		await dataSource.initialize();

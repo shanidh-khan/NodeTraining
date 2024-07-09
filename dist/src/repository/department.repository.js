@@ -9,45 +9,51 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-class EmployeeRepository {
+class DepartmentRepository {
     constructor(repository) {
         this.repository = repository;
     }
     find() {
         return __awaiter(this, void 0, void 0, function* () {
-            const employeeRepository = this.repository;
-            return employeeRepository.find({
-                relations: ["address", "department"],
+            const departmentRepository = this.repository;
+            return departmentRepository.find({
+                relations: ["employee"],
             });
         });
     }
-    findOneBy(filter) {
+    findOneBy(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            const employeeRepository = this.repository;
-            return employeeRepository.findOne({
-                where: filter,
-                relations: ["address", "department"],
+            const departmentRepository = this.repository;
+            return departmentRepository.findOne({
+                where: { id },
+                relations: ["employee"],
             });
         });
     }
-    save(newEmployee) {
+    findOne(department) {
         return __awaiter(this, void 0, void 0, function* () {
-            const employeeRepository = this.repository;
-            return employeeRepository.save(newEmployee);
+            const departmentRepository = this.repository;
+            return departmentRepository.findOne({ where: department });
         });
     }
-    delete(employee) {
+    save(newDepartment) {
         return __awaiter(this, void 0, void 0, function* () {
-            const employeeRepository = this.repository;
-            return yield employeeRepository.softDelete(employee);
+            const departmentRepository = this.repository;
+            return departmentRepository.save(newDepartment);
         });
     }
-    remove(employee) {
+    delete(newDepartment) {
         return __awaiter(this, void 0, void 0, function* () {
-            const employeeRepository = this.repository;
-            return yield employeeRepository.softRemove(employee);
+            const departmentRepository = this.repository;
+            return yield departmentRepository.softDelete(newDepartment);
+        });
+    }
+    remove(newDepartment) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const departmentRepository = this.repository;
+            return yield departmentRepository.softRemove(newDepartment);
         });
     }
 }
-exports.default = EmployeeRepository;
-//# sourceMappingURL=employee.repository.js.map
+exports.default = DepartmentRepository;
+//# sourceMappingURL=department.repository.js.map

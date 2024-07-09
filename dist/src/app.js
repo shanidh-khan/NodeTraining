@@ -16,23 +16,17 @@ const logger_middleware_1 = __importDefault(require("./middleware/logger.middlew
 const body_parser_1 = __importDefault(require("body-parser"));
 const data_source_db_1 = __importDefault(require("./db/data-source.db"));
 const employee_routes_1 = __importDefault(require("./routes/employee.routes"));
-const http_exceptions_1 = __importDefault(require("./exceptions/http.exceptions"));
+const dotenv_1 = __importDefault(require("dotenv"));
+const department_routes_1 = __importDefault(require("./routes/department.routes"));
+const error_middleware_1 = __importDefault(require("./middleware/error.middleware"));
+dotenv_1.default.config();
 const express = require("express");
 const server = new express();
 server.use(body_parser_1.default.json());
 server.use(logger_middleware_1.default);
 server.use("/employees", employee_routes_1.default);
-server.use((err, req, res, next) => {
-    console.error(err.stack);
-    if (err instanceof http_exceptions_1.default) {
-        res.status(err.status).send({ error: err.message });
-    }
-    res.status(500).send({ error: err.message });
-});
-server.get("/", (req, res) => {
-    console.log(req.url);
-    res.status(200).send("Hello World");
-});
+server.use("/department", department_routes_1.default);
+server.use(error_middleware_1.default);
 (() => __awaiter(void 0, void 0, void 0, function* () {
     try {
         yield data_source_db_1.default.initialize();

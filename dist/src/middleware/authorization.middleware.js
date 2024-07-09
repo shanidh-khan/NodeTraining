@@ -14,9 +14,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const constants_1 = require("../utils/constants");
+const http_exceptions_1 = __importDefault(require("../exceptions/http.exceptions"));
 const authorize = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const token = getTokenFromRequestHeader(req);
+        if (!token) {
+            throw new http_exceptions_1.default(403, "You are not authorized. Please login to continue");
+        }
         console.log("token: ", token);
         const payload = jsonwebtoken_1.default.verify(token, constants_1.JWT_TOKEN);
         req.name = payload.name;

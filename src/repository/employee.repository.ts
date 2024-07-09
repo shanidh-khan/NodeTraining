@@ -6,14 +6,16 @@ class EmployeeRepository {
 
 	async find() {
 		const employeeRepository = this.repository;
-		return employeeRepository.find({ relations: ["address"] });
+		return employeeRepository.find({
+			relations: ["address", "department"],
+		});
 	}
 
 	async findOneBy(filter: Partial<Employee>): Promise<Employee> {
 		const employeeRepository = this.repository;
 		return employeeRepository.findOne({
 			where: filter,
-			relations: ["address"],
+			relations: ["address", "department"],
 		});
 	}
 

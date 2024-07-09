@@ -9,9 +9,9 @@
 		"start-server": "npm run build && node dist/src/app.js",
 		"build": "rm -rf dist/ && tsc",
 		"migration:create": "npm run build && npx typeorm migration:create",
-		"migration:generate": "npm run build && npx typeorm migration:generate -d dist/db/data-source.db.js",
-		"migration:run": "npm run build && npx typeorm migration:run -d dist/db/data-source.db.js",
-		"migration:revert": "npm run build && npx typeorm migration:revert -d dist/db/data-source.db.js"
+		"migration:generate": "npm run build && npx typeorm migration:generate -d dist/src/db/data-source.db.js",
+		"migration:run": "npm run build && npx typeorm migration:run -d dist/src/db/data-source.db.js",
+		"migration:revert": "npm run build && npx typeorm migration:revert -d dist/src/db/data-source.db.js"
 	},
 	"repository": {
 		"type": "git",
